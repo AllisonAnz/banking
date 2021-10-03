@@ -269,3 +269,84 @@ fetch(`http://localhost:9393/clients`, {
 
         res_client = {id: client.id, first_name: client.firstName, last_name: client.lastName}
         return [200, { 'Content-Type' => 'application/json' }, [{:client => res_client}.to_json ]]
+
+#------------------------------------------------------------
+return (
+        <div className="container">] <div className=" text-center mt-5 ">
+            <h1>Bootstrap Contact Form</h1>
+        </div>
+            <div className="row ">
+                <div className="col-lg-7 mx-auto">
+                    <div className="card mt-2 mx-auto p-4 bg-light">
+                        <div className="card-body bg-light">
+                            <div className="container">
+                                <form id="contact-form">
+                                    <div className="controls">
+                                        <div className="row">
+                                            <div className="col-md-6">
+                                                <div className="form-group"> <label >Firstname *</label> <input value={firstName} onChange={handleChange} id="form_name" type="text" name="firstName" className="form-control" placeholder="Please enter your firstname *" required="required" data-error="Firstname is required."/> </div>
+                                            </div>
+                                            <div className="col-md-6">
+                                                <div className="form-group"> <label>Lastname *</label> <input value={lastName} onChange={handleChange} id="form_lastname" type="text" name="lastName" className="form-control" placeholder="Please enter your lastname *" required="required" data-error="Lastname is required."/> </div>
+                                            </div>
+                                        </div>
+                                        <div className="row">
+                                            <div className="col-md-6">
+                                                <div className="form-group"> <label>Email *</label> <input id="form_email" type="email" name="email" className="form-control" placeholder="Please enter your email *" required="required" data-error="Valid email is required."/> </div>
+                                            </div>
+                                        </div>
+                                            <div className="col-md-12"> <input type="submit" className="btn btn-success btn-send pt-2 btn-block " value="Send Message" onSubmit={handleSubmit}/> </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div> 
+                </div> 
+            </div>
+        </div>
+    )
+}
+
+#------------------------------------------------------------------------------------------------------------------------------
+class Application
+
+  def call(env)
+    resp = Rack::Response.new
+    req = Rack::Request.new(env)
+
+    if req.path.match(/test/) 
+      return [200, { 'Content-Type' => 'application/json' }, [ {:message => "test response!"}.to_json ]]
+     
+      binding.pry
+    elsif req.path.match(/checking_accounts/)
+          return [200, { 'Content-Type' => 'application/json' }, [ CheckingAccount.all.to_json]]
+        
+    elsif req.path.match(/clients/)
+      if req.env["REQUEST_METHOD"] === 'GET'
+        
+        if(req.path.split("/clients/").length <= 1)
+          return [200, { 'Content-Type' => 'application/json' }, [ Client.all.to_json({:include => [:contact_info, :checking_accounts, :saving_accounts]}) ]]
+          
+        elsif
+          client_id = req.path.split("/clients/").last
+          client = Client.find_by(id: client_id)
+          return [200, { 'Content-Type' => 'application/json' }, [ client.to_json({:include => [:contact_info, :checking_accounts, :saving_accounts, :transactions]}) ]]
+        end
+     
+     
+     
+      end
+  
+
+
+    
+  
+    else
+      resp.write "Path Not Found"
+
+    end
+
+    resp.finish
+  end
+
+end

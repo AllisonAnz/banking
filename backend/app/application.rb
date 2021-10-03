@@ -9,9 +9,9 @@ class Application
      
     elsif req.path.match(/checking_accounts/)
           return [200, { 'Content-Type' => 'application/json' }, [ CheckingAccount.all.to_json]]
+          binding.pry
         
     elsif req.path.match(/clients/)
-
       if req.env["REQUEST_METHOD"] === 'GET'
         
         if(req.path.split("/clients/").length <= 1)
@@ -22,9 +22,7 @@ class Application
           client = Client.find_by(id: client_id)
           return [200, { 'Content-Type' => 'application/json' }, [ client.to_json({:include => [:contact_info, :checking_accounts, :saving_accounts, :transactions]}) ]]
         end
-      elsif req.env["REQUEST_METHOD"] === 'POST'
-         return [200, { 'Content-Type' => 'application/json' }, ["Its working".to_json]]]
-      
+     
      
      
       end

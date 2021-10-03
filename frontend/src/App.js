@@ -5,7 +5,7 @@ import Navigation from './components/Navigation'
 import Home from './components/Home'
 import Clients from './components/Clients'
 import ClientContainer from './components/ClientContainer'
-import AddNewClient from './components/ContainerComponents/AddNewClient'
+import AddNewClient from './components/AddNewClient'
 
 export class App extends Component {
   render() {
