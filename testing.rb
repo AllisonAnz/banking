@@ -350,3 +350,12 @@ class Application
   end
 
 end
+
+#------------------------------------
+ .then(client => history.push(`/clients/${client.id}`))
+
+ # pry input => first_name, last_name 
+ # input["last_name"] => get the last name
+
+ Client.create(last_name: input["last_name"], first_name: input["first_name"])
+ #=> Client created

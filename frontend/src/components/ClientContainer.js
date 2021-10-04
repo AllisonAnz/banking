@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import ContactInfo from './ContainerComponents/ContactInfo.js'
+import DeleteClient from './ContainerComponents/DeleteClient.js'
 import Transactions from './ContainerComponents/Transactions.js'
 
 export class ClientContainer extends Component {
@@ -54,7 +55,7 @@ export class ClientContainer extends Component {
                 <div className="container mt-4 mb-4 p-3 d-flex justify-content-center">
                     <div className="card p-4">
                         <h1>{this.state.firstName} {this.state.lastName}</h1>
-                        <ContactInfo contactInfo={this.state.contactInfo} />
+                       {this.state.contactInfo? <ContactInfo contactInfo={this.state.contactInfo} /> : "Not Available"}
                     </div>
                     <div className="card p-5">
                         <h3>Accounts: </h3>
@@ -72,7 +73,13 @@ export class ClientContainer extends Component {
                                     Savings: {account.account_number} Balance: {account.balance} <span></span>
                                 </li>) : ""}
                         </ul>
-                    </div>
+                                
+                        
+                        <div className="card-footer text-muted mx-auto">
+                            < DeleteClient client={this.props.match.params.id} />
+                        </div>
+                        </div>
+
                 </div>
                 <div className="container justify-content-center">
                     <div className="card p-6">

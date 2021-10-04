@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useHistory } from 'react-router-dom'
 
 export default function AddNewClient() {
     const [formVal, setFormVal] = useState({
@@ -6,6 +7,7 @@ export default function AddNewClient() {
         lastName: ""
     })
     const {firstName, lastName} = formVal
+    const history = useHistory()
 
     const handleChange = (e) => {
         
@@ -17,27 +19,26 @@ export default function AddNewClient() {
 
     const handleSubmit = (e) => {
         e.preventDefault()
-        const clientApi = 'http://localhost:9393/'
-        fetch(clientApi, {
-            
-            method: 'POST',
-            headers: {
-                'Access-Control-Allow-Origin': '*',
-                'Content-Type': 'application/json',
-               
-            },
-            body: JSON.stringify({
-                firstName
-            })
-        })
-            
+        //var formdata = new FormData();
+        //formdata.append("first_name", firstName);
+        //formdata.append("last_name", lastName);
 
+        var requestOptions = {
+            method: 'POST',
+            body: JSON.stringify({first_name: firstName, last_name: lastName}),
+            redirect: 'follow'
+        };
+
+        fetch("http://localhost:9393/clients/", requestOptions)
+            .then(response => response.json)
+            .then(client => history.push(`/clients/${client.id}`))
+            .catch(error => console.log('error', error));
     }
 
 
     return (
         <div className="container">] <div className=" text-center mt-5 ">
-            <h1>Bootstrap Contact Form</h1>
+            <h1>Add New Client</h1>
         </div>
             <div className="row ">
                 <div className="col-lg-7 mx-auto">
